@@ -158,7 +158,9 @@ public class Game extends ApplicationAdapter {
 		figure.y += posYDelta * sprintFac;
 		maps[0].keepInBounds(figure);
 		if (posXDelta != 0 || posYDelta != 0) {
-			renderState = (int) (delta * 2) % 2;
+			renderState = (int) (delta * 5 * sprintFac) % 2;
+		} else if (renderState != 0) {
+			renderState = 0;
 		}
 	}
 

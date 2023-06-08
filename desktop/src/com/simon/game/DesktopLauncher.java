@@ -13,7 +13,7 @@ public class DesktopLauncher {
 
 		config.setForegroundFPS(60);
 		config.setTitle("Game");
-		//config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 
 		new Lwjgl3Application(new Game(), config);
 	}

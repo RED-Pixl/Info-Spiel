@@ -27,6 +27,7 @@ public class Game extends ApplicationAdapter {
 	float delta;
 
 	int posXDelta, posYDelta;
+	int sprintFac;
 	Texture figureImg;
 	Rectangle figure;
 	
@@ -40,6 +41,7 @@ public class Game extends ApplicationAdapter {
 
 		posXDelta = 0;
 		posYDelta = 0;
+		sprintFac = 1;
 
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
@@ -62,15 +64,22 @@ public class Game extends ApplicationAdapter {
 				switch (keycode) {
 					case Input.Keys.ESCAPE:
 						Gdx.app.exit();
+						return super.keyDown(keycode);
 					case Input.Keys.W:
 						posYDelta++;
-						System.out.println("up" + posYDelta);
+						return super.keyDown(keycode);
 					case Input.Keys.S:
 						posYDelta--;
+						return super.keyDown(keycode);
 					case Input.Keys.D:
 						posXDelta++;
+						return super.keyDown(keycode);
 					case Input.Keys.A:
 						posXDelta--;
+						return super.keyDown(keycode);
+					case Input.Keys.CONTROL_LEFT:
+						sprintFac = 2;
+						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
 			}
@@ -80,12 +89,19 @@ public class Game extends ApplicationAdapter {
 				switch (keycode) {
 					case Input.Keys.W:
 						posYDelta--;
+						return super.keyUp(keycode);
 					case Input.Keys.S:
 						posYDelta++;
+						return super.keyUp(keycode);
 					case Input.Keys.D:
 						posXDelta--;
+						return super.keyUp(keycode);
 					case Input.Keys.A:
 						posXDelta++;
+						return super.keyUp(keycode);
+					case Input.Keys.CONTROL_LEFT:
+						sprintFac = 1;
+						return super.keyUp(keycode);
 				}
 				return super.keyUp(keycode);
 			}
@@ -112,10 +128,11 @@ public class Game extends ApplicationAdapter {
 
 	private void act() {
 		delta += Gdx.graphics.getDeltaTime();
-		if (delta >= 0.05) {
-			delta %= 0.05;
-			figure.x += posXDelta;
-			figure.y += posYDelta;
+		if (delta >= 0.04) {
+			delta %= 0.04;
+			figure.x += posXDelta * sprintFac;
+			figure.y += posYDelta * sprintFac;
+			Map.keepInBounds(figure);
 		}
 	}
 

@@ -2,6 +2,7 @@ package com.simon.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 public class Map {
@@ -21,8 +22,24 @@ public class Map {
         return map;
     }
 
-    public void keepInBounds() {
+    public static void keepInBounds(Rectangle rect) {
+        int lowerBoundX = 0;
+        int upperBoundX = (int) (32 * 30 - rect.width);
 
+        int lowerBoundY = 0;
+        int upperBoundY = (int) (32 * 20 - rect.height);
+
+        if (rect.x < lowerBoundX) {
+            rect.x = lowerBoundX;
+        } else if (rect.x > upperBoundX) {
+            rect.x = upperBoundX;
+        }
+
+        if (rect.y < lowerBoundY) {
+            rect.y = lowerBoundY;
+        } else if (rect.y > upperBoundY) {
+            rect.y = upperBoundY;
+        }
     }
 
     public void draw(SpriteBatch batch) {

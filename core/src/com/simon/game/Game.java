@@ -26,9 +26,10 @@ public class Game extends ApplicationAdapter {
 	float delta;
 
 	int posXDelta, posYDelta;
-	int sprintFac;
-	Texture figureImg;
+	float sprintFac;
+	Texture[] figureImg;
 	Rectangle figure;
+	int renderState;
 
 	private Map[] maps;
 	
@@ -42,7 +43,7 @@ public class Game extends ApplicationAdapter {
 
 		posXDelta = 0;
 		posYDelta = 0;
-		sprintFac = 1;
+		sprintFac = 0.5f;
 
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
@@ -50,7 +51,11 @@ public class Game extends ApplicationAdapter {
 		// Setting up everything regarding the player-character
 
 		figure = new Rectangle(64, 128, 16, 32);
-		figureImg = new Texture(Gdx.files.internal("Sprites/char.png"));
+		renderState = 0;
+
+		figureImg = new Texture[2];
+		figureImg[0] = new Texture(Gdx.files.internal("Sprites/char.png"));
+		figureImg[1] = new Texture(Gdx.files.internal("Sprites/charWalk.png"));
 
 		// Managing maps
 
@@ -100,7 +105,7 @@ public class Game extends ApplicationAdapter {
 						posXDelta--;
 						return super.keyDown(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 2;
+						sprintFac = 1;
 						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
@@ -122,7 +127,7 @@ public class Game extends ApplicationAdapter {
 						posXDelta++;
 						return super.keyUp(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 1;
+						sprintFac = 0.5f;
 						return super.keyUp(keycode);
 				}
 				return super.keyUp(keycode);
@@ -140,7 +145,7 @@ public class Game extends ApplicationAdapter {
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 		spriteBatch.begin();
 
-		spriteBatch.draw(figureImg, figure.x, figure.y);
+		spriteBatch.draw(figureImg[renderState], figure.x, figure.y);
 
 		spriteBatch.end();
 
@@ -149,11 +154,11 @@ public class Game extends ApplicationAdapter {
 
 	private void act() {
 		delta += Gdx.graphics.getDeltaTime();
-		if (delta >= 0.04) {
-			delta %= 0.04;
-			figure.x += posXDelta * sprintFac;
-			figure.y += posYDelta * sprintFac;
-			maps[0].keepInBounds(figure);
+		figure.x += posXDelta * sprintFac;
+		figure.y += posYDelta * sprintFac;
+		maps[0].keepInBounds(figure);
+		if (posXDelta != 0 || posYDelta != 0) {
+			renderState = ((int) delta) % 2;
 		}
 	}
 
@@ -166,7 +171,8 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		figureImg.dispose();
+		figureImg[0].dispose();
+		figureImg[1].dispose();
 		spriteBatch.dispose();
 	}
 }

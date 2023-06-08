@@ -26,7 +26,6 @@ public class Game extends ApplicationAdapter {
 	float viewportWidth,viewportHeight;
 	float delta;
 
-	int posX, posY;
 	int posXDelta, posYDelta;
 	Texture figureImg;
 	Rectangle figure;
@@ -39,8 +38,6 @@ public class Game extends ApplicationAdapter {
 		viewportHeight = 32 * 20;
 		delta = 0;
 
-		posX = 0;
-		posY = 0;
 		posXDelta = 0;
 		posYDelta = 0;
 
@@ -55,7 +52,7 @@ public class Game extends ApplicationAdapter {
 
 		// Setting up everything regarding the player-character
 
-		figure = new Rectangle(posX, posY, 16, 32);
+		figure = new Rectangle(64, 128, 16, 32);
 		figureImg = new Texture(Gdx.files.internal("Sprites/char.png"));
 
 		// Input Processor for managing the keyboard inputs
@@ -67,6 +64,7 @@ public class Game extends ApplicationAdapter {
 						Gdx.app.exit();
 					case Input.Keys.W:
 						posYDelta++;
+						System.out.println("up" + posYDelta);
 					case Input.Keys.S:
 						posYDelta--;
 					case Input.Keys.D:
@@ -105,7 +103,7 @@ public class Game extends ApplicationAdapter {
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 		spriteBatch.begin();
 
-		spriteBatch.draw(figureImg, posX, posY);
+		spriteBatch.draw(figureImg, figure.x, figure.y);
 
 		spriteBatch.end();
 
@@ -114,18 +112,10 @@ public class Game extends ApplicationAdapter {
 
 	private void act() {
 		delta += Gdx.graphics.getDeltaTime();
-		if (delta >= 1) {
-			delta %= 10;
-			posX += posXDelta;
-			posY += posYDelta;
-			if (posX > 32 * 30 - figure.width) {
-				posX = (int) (32 * 30 - figure.width);
-			} else if (posX < 0) {
-				posX = 0;
-			}
-			if (posY > 32 * 20 - figure.height) {
-				posY = (int) (32 * 20 - figure.height);
-			}
+		if (delta >= 0.05) {
+			delta %= 0.05;
+			figure.x += posXDelta;
+			figure.y += posYDelta;
 		}
 	}
 

@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Game extends ApplicationAdapter {
 
 	SpriteBatch spriteBatch;
-	OrthogonalTiledMapRenderer renderer;
 	OrthographicCamera cam;
 	ExtendViewport viewport;
 
@@ -30,6 +29,8 @@ public class Game extends ApplicationAdapter {
 	int sprintFac;
 	Texture figureImg;
 	Rectangle figure;
+
+	private Map[] maps;
 	
 	@Override
 	public void create () {
@@ -46,16 +47,37 @@ public class Game extends ApplicationAdapter {
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
-		TmxMapLoader loader = new TmxMapLoader();
-		TiledMap map = loader.load("map.tmx");
-
-		renderer = new OrthogonalTiledMapRenderer(map);
-		renderer.setView(cam);
-
 		// Setting up everything regarding the player-character
 
 		figure = new Rectangle(64, 128, 16, 32);
 		figureImg = new Texture(Gdx.files.internal("Sprites/char.png"));
+
+		// Managing maps
+
+		maps = new Map[1];
+		maps[0] = new Map(320, 192, new TmxMapLoader().load("map.tmx"), cam) {
+			@Override
+			public int keepInBounds(Rectangle rect) {
+				int lowerBoundX = 320;
+				int upperBoundX = (int) (640 - rect.width);
+
+				int lowerBoundY = 224;
+				int upperBoundY = (int) (416 - rect.height);
+
+				if (rect.x < lowerBoundX) {
+					rect.x = lowerBoundX;
+				} else if (rect.x > upperBoundX) {
+					rect.x = upperBoundX;
+				}
+
+				if (rect.y < lowerBoundY) {
+					rect.y = lowerBoundY;
+				} else if (rect.y > upperBoundY) {
+					rect.y = upperBoundY;
+				}
+				return 0;
+			}
+		};
 
 		// Input Processor for managing the keyboard inputs
 		Gdx.input.setInputProcessor(new InputAdapter() {
@@ -113,8 +135,7 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(Color.BLACK);
 		viewport.apply();
 
-		renderer.setView(cam);
-		renderer.render();
+		maps[0].draw(spriteBatch);
 
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 		spriteBatch.begin();
@@ -132,7 +153,7 @@ public class Game extends ApplicationAdapter {
 			delta %= 0.04;
 			figure.x += posXDelta * sprintFac;
 			figure.y += posYDelta * sprintFac;
-			Map.keepInBounds(figure);
+			maps[0].keepInBounds(figure);
 		}
 	}
 
@@ -145,7 +166,6 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		renderer.dispose();
 		figureImg.dispose();
 		spriteBatch.dispose();
 	}

@@ -18,20 +18,21 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Game extends ApplicationAdapter {
 
-	SpriteBatch spriteBatch;
-	OrthographicCamera cam;
-	ExtendViewport viewport;
+	private SpriteBatch spriteBatch;
+	private OrthographicCamera cam;
+	private ExtendViewport viewport;
 
-	float viewportWidth,viewportHeight;
-	float delta;
+	private float viewportWidth,viewportHeight;
+	private float delta;
 
-	int posXDelta, posYDelta;
-	float sprintFac;
-	Texture[] figureImg;
-	Rectangle figure;
-	int renderState;
+	private int posXDelta, posYDelta;
+	private float sprintFac;
+	private Texture[] figureImg;
+	private Rectangle figure;
+	private int renderState;
 
 	private Map[] maps;
+	private int mapId;
 	
 	@Override
 	public void create () {
@@ -59,8 +60,9 @@ public class Game extends ApplicationAdapter {
 
 		// Managing maps
 
-		maps = new Map[1];
-		maps[0] = new Map(320, 192, new TmxMapLoader().load("map.tmx"), cam) {
+		mapId = 0;
+		maps = new Map[2];
+		maps[0] = new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam) {
 			@Override
 			public int keepInBounds(Rectangle rect) {
 				int lowerBoundX = 320;
@@ -80,7 +82,38 @@ public class Game extends ApplicationAdapter {
 				} else if (rect.y > upperBoundY) {
 					rect.y = upperBoundY;
 				}
+
+				if (rect.x / 32 + 1 == 18 && rect.y / 32 + 1 == 11) {
+					rect.x = 15 * 32;
+					rect.y = 5 * 32 + 16;
+					System.out.println("hi");
+					return 1;
+				}
+
 				return 0;
+			}
+		};
+		maps[1] = new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam) {
+			@Override
+			public int keepInBounds(Rectangle rect) {
+				int lowerBoundX = 352;
+				int upperBoundX = (int) (608 - rect.width);
+
+				int lowerBoundY = 160;
+				int upperBoundY = (int) (480 - rect.height);
+
+				if (rect.x < lowerBoundX) {
+					rect.x = lowerBoundX;
+				} else if (rect.x > upperBoundX) {
+					rect.x = upperBoundX;
+				}
+
+				if (rect.y < lowerBoundY) {
+					rect.y = lowerBoundY;
+				} else if (rect.y > upperBoundY) {
+					rect.y = upperBoundY;
+				}
+				return 1;
 			}
 		};
 
@@ -140,7 +173,7 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(Color.BLACK);
 		viewport.apply();
 
-		maps[0].draw(spriteBatch);
+		maps[mapId].draw(spriteBatch);
 
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 		spriteBatch.begin();
@@ -156,7 +189,7 @@ public class Game extends ApplicationAdapter {
 		delta += Gdx.graphics.getDeltaTime();
 		figure.x += posXDelta * sprintFac;
 		figure.y += posYDelta * sprintFac;
-		maps[0].keepInBounds(figure);
+		mapId = maps[mapId].keepInBounds(figure);
 		if (posXDelta != 0 || posYDelta != 0) {
 			renderState = (int) (delta * 5 * sprintFac) % 2;
 		} else if (renderState != 0) {

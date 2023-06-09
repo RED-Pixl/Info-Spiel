@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -83,7 +84,7 @@ public class Game extends ApplicationAdapter {
 					rect.y = upperBoundY;
 				}
 
-				if (rect.x / 32 + 1 == 18 && rect.y / 32 + 1 == 11) {
+				if (rect.contains(new Vector2(15 * 32, 12 * 32))) {
 					rect.x = 15 * 32;
 					rect.y = 5 * 32 + 16;
 					System.out.println("hi");
@@ -113,6 +114,14 @@ public class Game extends ApplicationAdapter {
 				} else if (rect.y > upperBoundY) {
 					rect.y = upperBoundY;
 				}
+
+				if (rect.contains(new Vector2(15 * 32, 5 * 32))) {
+					rect.x = 15 * 32;
+					rect.y = 5 * 32;
+					System.out.println("hi");
+					return 0;
+				}
+
 				return 1;
 			}
 		};

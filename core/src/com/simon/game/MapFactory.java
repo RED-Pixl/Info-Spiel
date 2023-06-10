@@ -16,7 +16,7 @@ public class MapFactory{
                     private final int upperBoundY = 384;
 
                     @Override
-                    public int keepInBounds(Rectangle rect) {
+                    public byte keepInBounds(Rectangle rect) {
 
                         checkPos(rect, lowerBoundX, upperBoundX, lowerBoundY, upperBoundY);
 
@@ -37,7 +37,7 @@ public class MapFactory{
                     private final int upperBoundY = 448;
 
                     @Override
-                    public int keepInBounds(Rectangle rect) {
+                    public byte keepInBounds(Rectangle rect) {
                         checkPos(rect, lowerBoundX, upperBoundX, lowerBoundY, upperBoundY);
 
                         if (rect.contains(new Vector2(480, 160))) {

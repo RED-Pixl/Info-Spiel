@@ -27,13 +27,13 @@ public class Game extends ApplicationAdapter {
 	private float delta;
 
 	private int posXDelta, posYDelta;
-	private float sprintFac;
+	private byte sprintFac;
 	private Texture[] figureImg;
 	private Rectangle figure;
-	private int renderState;
+	private byte renderState;
 
 	private Map[] maps;
-	private int mapId;
+	private byte mapId;
 	
 	@Override
 	public void create () {
@@ -45,7 +45,7 @@ public class Game extends ApplicationAdapter {
 
 		posXDelta = 0;
 		posYDelta = 0;
-		sprintFac = 0.5f;
+		sprintFac = 25;
 
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
@@ -86,7 +86,7 @@ public class Game extends ApplicationAdapter {
 						posXDelta--;
 						return super.keyDown(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 1;
+						sprintFac = 40;
 						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
@@ -108,7 +108,7 @@ public class Game extends ApplicationAdapter {
 						posXDelta++;
 						return super.keyUp(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 0.5f;
+						sprintFac = 25;
 						return super.keyUp(keycode);
 				}
 				return super.keyUp(keycode);
@@ -134,16 +134,19 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void act() {
-		delta += Gdx.graphics.getDeltaTime();
-		figure.x += posXDelta * sprintFac;
-		figure.y += posYDelta * sprintFac;
+		float frameTime;
+		delta += frameTime = Gdx.graphics.getDeltaTime();
+		figure.x += posXDelta * sprintFac * frameTime;
+		figure.y += posYDelta * sprintFac * frameTime;
+
+		// updating the map
 		mapId = maps[mapId].keepInBounds(figure);
 		if (maps[mapId] == null) {
 			maps[mapId] = MapFactory.create(mapId, cam);
 		}
 
 		if (posXDelta != 0 || posYDelta != 0) {
-			renderState = (int) (delta * 5 * sprintFac) % 2;
+			renderState = (byte) ((delta * 5 * sprintFac) % 10);
 		} else if (renderState != 0) {
 			renderState = 0;
 		}

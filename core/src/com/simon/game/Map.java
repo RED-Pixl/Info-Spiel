@@ -30,7 +30,7 @@ public abstract class Map {
         return map;
     }
 
-    public abstract int keepInBounds(Rectangle rect);
+    public abstract byte keepInBounds(Rectangle rect);
 
     public void draw(SpriteBatch batch) {
         renderer.setView((OrthographicCamera) cam);

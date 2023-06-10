@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Game extends ApplicationAdapter {
 
 	private SpriteBatch spriteBatch;
-	private OrthographicCamera cam;
 	private ExtendViewport viewport;
 
 	private float viewportWidth,viewportHeight;
@@ -47,7 +46,7 @@ public class Game extends ApplicationAdapter {
 		posYDelta = 0;
 		sprintFac = 0.5f;
 
-		cam = new OrthographicCamera();
+		OrthographicCamera cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
 		// Setting up everything regarding the player-character
@@ -63,68 +62,8 @@ public class Game extends ApplicationAdapter {
 
 		mapId = 0;
 		maps = new Map[2];
-		maps[0] = new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam) {
-			@Override
-			public int keepInBounds(Rectangle rect) {
-				int lowerBoundX = 320;
-				int upperBoundX = (int) (640 - rect.width);
-
-				int lowerBoundY = 224;
-				int upperBoundY = (int) (416 - rect.height);
-
-				if (rect.x < lowerBoundX) {
-					rect.x = lowerBoundX;
-				} else if (rect.x > upperBoundX) {
-					rect.x = upperBoundX;
-				}
-
-				if (rect.y < lowerBoundY) {
-					rect.y = lowerBoundY;
-				} else if (rect.y > upperBoundY) {
-					rect.y = upperBoundY;
-				}
-
-				if (rect.contains(new Vector2(15 * 32, 12 * 32))) {
-					rect.x = 15 * 32;
-					rect.y = 5 * 32 + 16;
-					System.out.println("hi");
-					return 1;
-				}
-
-				return 0;
-			}
-		};
-		maps[1] = new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam) {
-			@Override
-			public int keepInBounds(Rectangle rect) {
-				int lowerBoundX = 352;
-				int upperBoundX = (int) (608 - rect.width);
-
-				int lowerBoundY = 160;
-				int upperBoundY = (int) (480 - rect.height);
-
-				if (rect.x < lowerBoundX) {
-					rect.x = lowerBoundX;
-				} else if (rect.x > upperBoundX) {
-					rect.x = upperBoundX;
-				}
-
-				if (rect.y < lowerBoundY) {
-					rect.y = lowerBoundY;
-				} else if (rect.y > upperBoundY) {
-					rect.y = upperBoundY;
-				}
-
-				if (rect.contains(new Vector2(15 * 32, 5 * 32))) {
-					rect.x = 15 * 32;
-					rect.y = 5 * 32;
-					System.out.println("hi");
-					return 0;
-				}
-
-				return 1;
-			}
-		};
+		maps[0] = MapFactory.create(0, cam);
+		maps[1] = MapFactory.create(1, cam);
 
 		// Input Processor for managing the keyboard inputs
 		Gdx.input.setInputProcessor(new InputAdapter() {

@@ -21,6 +21,7 @@ public class Game extends ApplicationAdapter {
 
 	private SpriteBatch spriteBatch;
 	private ExtendViewport viewport;
+	private OrthographicCamera cam;
 
 	private float viewportWidth,viewportHeight;
 	private float delta;
@@ -46,7 +47,7 @@ public class Game extends ApplicationAdapter {
 		posYDelta = 0;
 		sprintFac = 0.5f;
 
-		OrthographicCamera cam = new OrthographicCamera();
+		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
 		// Setting up everything regarding the player-character
@@ -63,7 +64,6 @@ public class Game extends ApplicationAdapter {
 		mapId = 0;
 		maps = new Map[2];
 		maps[0] = MapFactory.create(0, cam);
-		maps[1] = MapFactory.create(1, cam);
 
 		// Input Processor for managing the keyboard inputs
 		Gdx.input.setInputProcessor(new InputAdapter() {
@@ -138,6 +138,10 @@ public class Game extends ApplicationAdapter {
 		figure.x += posXDelta * sprintFac;
 		figure.y += posYDelta * sprintFac;
 		mapId = maps[mapId].keepInBounds(figure);
+		if (maps[mapId] == null) {
+			maps[mapId] = MapFactory.create(mapId, cam);
+		}
+
 		if (posXDelta != 0 || posYDelta != 0) {
 			renderState = (int) (delta * 5 * sprintFac) % 2;
 		} else if (renderState != 0) {

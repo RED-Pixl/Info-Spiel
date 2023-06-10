@@ -10,30 +10,19 @@ public class MapFactory{
         switch (mapId) {
             case 0:
                 return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam) {
+                    private final int lowerBoundX = 320;
+                    private final int upperBoundX = 624;
+                    private final int lowerBoundY = 224;
+                    private final int upperBoundY = 384;
+
                     @Override
                     public int keepInBounds(Rectangle rect) {
-                        int lowerBoundX = 320;
-                        int upperBoundX = (int) (640 - rect.width);
 
-                        int lowerBoundY = 224;
-                        int upperBoundY = (int) (416 - rect.height);
+                        checkPos(rect, lowerBoundX, upperBoundX, lowerBoundY, upperBoundY);
 
-                        if (rect.x < lowerBoundX) {
-                            rect.x = lowerBoundX;
-                        } else if (rect.x > upperBoundX) {
-                            rect.x = upperBoundX;
-                        }
-
-                        if (rect.y < lowerBoundY) {
-                            rect.y = lowerBoundY;
-                        } else if (rect.y > upperBoundY) {
-                            rect.y = upperBoundY;
-                        }
-
-                        if (rect.contains(new Vector2(15 * 32, 12 * 32))) {
-                            rect.x = 15 * 32;
-                            rect.y = 6 * 32 - rect.width / 2;
-                            System.out.println("hi");
+                        if (rect.contains(new Vector2(480, 416))) {
+                            rect.x = 15 * 32 - rect.width / 2;
+                            rect.y = 5 * 32 + 1;
                             return 1;
                         }
 
@@ -42,29 +31,18 @@ public class MapFactory{
                 };
             case 1:
                 return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam) {
+                    private final int lowerBoundX = 352;
+                    private final int upperBoundX = 592;
+                    private final int lowerBoundY = 160;
+                    private final int upperBoundY = 448;
+
                     @Override
                     public int keepInBounds(Rectangle rect) {
-                        int lowerBoundX = 352;
-                        int upperBoundX = (int) (608 - rect.width);
+                        checkPos(rect, lowerBoundX, upperBoundX, lowerBoundY, upperBoundY);
 
-                        int lowerBoundY = 160;
-                        int upperBoundY = (int) (480 - rect.height);
-
-                        if (rect.x < lowerBoundX) {
-                            rect.x = lowerBoundX;
-                        } else if (rect.x > upperBoundX) {
-                            rect.x = upperBoundX;
-                        }
-
-                        if (rect.y < lowerBoundY) {
-                            rect.y = lowerBoundY;
-                        } else if (rect.y > upperBoundY) {
-                            rect.y = upperBoundY;
-                        }
-
-                        if (rect.contains(new Vector2(15 * 32, 5 * 32))) {
-                            rect.x = 15 * 32;
-                            rect.y = 5 * 32;
+                        if (rect.contains(new Vector2(480, 160))) {
+                            rect.x = 15 * 32 - rect.width / 2;
+                            rect.y = 13 * 32 - rect.height - 1;
                             return 0;
                         }
 
@@ -73,5 +51,19 @@ public class MapFactory{
                 };
         }
         return null;
+    }
+
+    private static void checkPos(Rectangle rect, int lowerBoundX, int upperBoundX, int lowerBoundY, int upperBoundY) {
+        if (rect.x < lowerBoundX) {
+            rect.x = lowerBoundX;
+        } else if (rect.x > upperBoundX) {
+            rect.x = upperBoundX;
+        }
+
+        if (rect.y < lowerBoundY) {
+            rect.y = lowerBoundY;
+        } else if (rect.y > upperBoundY) {
+            rect.y = upperBoundY;
+        }
     }
 }

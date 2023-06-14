@@ -60,6 +60,15 @@ public class Game extends ApplicationAdapter {
 					case Input.Keys.CONTROL_LEFT:
 						player.startSprint();
 						return super.keyDown(keycode);
+					case Input.Keys.E:
+						if (!player.isInInventory()) {
+							player.openInventory();
+							return super.keyDown(keycode);
+						}
+						if (player.isInInventory()) {
+							player.closeInventory();
+							return super.keyDown(keycode);
+						}
 				}
 				return super.keyDown(keycode);
 			}

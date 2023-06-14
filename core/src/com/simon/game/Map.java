@@ -6,16 +6,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Map {
-    private int width;
-    private int height;
-    private TiledMap map;
-    private Array<Entity> entities;
-    private TiledMapRenderer renderer;
-    private Camera cam;
+    private final int width;
+    private final int height;
+    private final TiledMap map;
+    private final Array<Entity> entities;
+    private final TiledMapRenderer renderer;
+    private final Camera cam;
 
     public Map(int width, int height, TiledMap map, Camera cam, Entity... entities) {
         this.width = width;
@@ -30,7 +29,8 @@ public abstract class Map {
         return map;
     }
 
-    public abstract byte keepInBounds(Rectangle rect);
+    public abstract byte keepInBounds(Player player);
+    public abstract void enter();
 
     public void draw(SpriteBatch batch) {
         renderer.setView((OrthographicCamera) cam);

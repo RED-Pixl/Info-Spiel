@@ -6,64 +6,36 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Game extends ApplicationAdapter {
 
 	private SpriteBatch spriteBatch;
 	private ExtendViewport viewport;
 	private OrthographicCamera cam;
-
 	private float viewportWidth,viewportHeight;
-	private float delta;
-
-	private int posXDelta, posYDelta;
-	private byte sprintFac;
-	private Texture[] figureImg;
-	private Rectangle figure;
-	private byte renderState;
-
+	Player player;
 	private Map[] maps;
 	private byte mapId;
 	
 	@Override
 	public void create () {
-		spriteBatch = new SpriteBatch();
-
 		viewportWidth = 32 * 30;
 		viewportHeight = 32 * 20;
-		delta = 0;
 
-		posXDelta = 0;
-		posYDelta = 0;
-		sprintFac = 25;
-
+		spriteBatch = new SpriteBatch();
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
 		// Setting up everything regarding the player-character
-
-		figure = new Rectangle(64, 128, 16, 32);
-		renderState = 0;
-
-		figureImg = new Texture[2];
-		figureImg[0] = new Texture(Gdx.files.internal("Sprites/char.png"));
-		figureImg[1] = new Texture(Gdx.files.internal("Sprites/charWalk.png"));
+		player = new Player();
 
 		// Managing maps
-
 		mapId = 0;
 		maps = new Map[2];
 		maps[0] = MapFactory.create(0, cam);
+		maps[0].enter();
 
 		// Input Processor for managing the keyboard inputs
 		Gdx.input.setInputProcessor(new InputAdapter() {
@@ -74,19 +46,19 @@ public class Game extends ApplicationAdapter {
 						Gdx.app.exit();
 						return super.keyDown(keycode);
 					case Input.Keys.W:
-						posYDelta++;
+						player.posYDelta++;
 						return super.keyDown(keycode);
 					case Input.Keys.S:
-						posYDelta--;
+						player.posYDelta--;
 						return super.keyDown(keycode);
 					case Input.Keys.D:
-						posXDelta++;
+						player.posXDelta++;
 						return super.keyDown(keycode);
 					case Input.Keys.A:
-						posXDelta--;
+						player.posXDelta--;
 						return super.keyDown(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 40;
+						player.startSprint();
 						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
@@ -96,19 +68,19 @@ public class Game extends ApplicationAdapter {
 			public boolean keyUp(int keycode) {
 				switch (keycode) {
 					case Input.Keys.W:
-						posYDelta--;
+						player.posYDelta--;
 						return super.keyUp(keycode);
 					case Input.Keys.S:
-						posYDelta++;
+						player.posYDelta++;
 						return super.keyUp(keycode);
 					case Input.Keys.D:
-						posXDelta--;
+						player.posXDelta--;
 						return super.keyUp(keycode);
 					case Input.Keys.A:
-						posXDelta++;
+						player.posXDelta++;
 						return super.keyUp(keycode);
 					case Input.Keys.CONTROL_LEFT:
-						sprintFac = 25;
+						player.endSprint();
 						return super.keyUp(keycode);
 				}
 				return super.keyUp(keycode);
@@ -120,35 +92,21 @@ public class Game extends ApplicationAdapter {
 	public void render () {
 		ScreenUtils.clear(Color.BLACK);
 		viewport.apply();
-
 		maps[mapId].draw(spriteBatch);
-
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-		spriteBatch.begin();
-
-		spriteBatch.draw(figureImg[renderState], figure.x, figure.y);
-
-		spriteBatch.end();
-
+		player.draw(spriteBatch);
 		act();
 	}
 
 	private void act() {
-		float frameTime;
-		delta += frameTime = Gdx.graphics.getDeltaTime();
-		figure.x += posXDelta * sprintFac * frameTime;
-		figure.y += posYDelta * sprintFac * frameTime;
+		player.act();
 
 		// updating the map
-		mapId = maps[mapId].keepInBounds(figure);
-		if (maps[mapId] == null) {
-			maps[mapId] = MapFactory.create(mapId, cam);
-		}
-
-		if (posXDelta != 0 || posYDelta != 0) {
-			renderState = (byte) ((delta * 5 * sprintFac) % 10);
-		} else if (renderState != 0) {
-			renderState = 0;
+		if (mapId != (mapId = maps[mapId].keepInBounds(player))) {
+			if (maps[mapId] == null) {
+				maps[mapId] = MapFactory.create(mapId, cam);
+			}
+			maps[mapId].enter();
 		}
 	}
 
@@ -161,8 +119,7 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		figureImg[0].dispose();
-		figureImg[1].dispose();
+		player.dispose();
 		spriteBatch.dispose();
 	}
 }

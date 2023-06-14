@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
 		config.setForegroundFPS(60);
-		config.setTitle("Game");
+		config.setTitle("Spiel");
 		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.setWindowIcon("Sprites/logo.png");
 

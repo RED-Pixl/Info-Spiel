@@ -69,6 +69,16 @@ public class Game extends ApplicationAdapter {
 							player.closeInventory();
 							return super.keyDown(keycode);
 						}
+					case Input.Keys.LEFT:
+						if (player.isInInventory()) {
+							player.selectL();
+						}
+						return super.keyDown(keycode);
+					case Input.Keys.RIGHT:
+						if (player.isInInventory()) {
+							player.selectR();
+						}
+						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
 			}

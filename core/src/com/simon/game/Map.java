@@ -8,6 +8,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public abstract class Map {
     private final int width;
     private final int height;
@@ -45,5 +48,10 @@ public abstract class Map {
 
     public void removeEntity(Entity entity) {
         entities.removeValue(entity, true);
+    }
+
+    public Entity getNearestEntity(int x, int y) {
+        Optional<Entity> res = Arrays.stream(entities.toArray()).min((a, b) ->((b.x + x)^2 + (b.y + y)^2) - ((a.x + x)^2 + (a.y + y)^2));
+        return res.orElse(null);
     }
 }

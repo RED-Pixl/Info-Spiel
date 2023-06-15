@@ -15,8 +15,10 @@ public class Player {
     private final Texture[] playerTexture;
     private byte renderState;
     private final Array<Item> inventory;
+    private final Texture dark;
+    private byte selected;
+    private Texture selector;
 
-    private Texture dark;
 
     public Player() {
         rectangle = new Rectangle(472, 304, 16, 32);
@@ -38,7 +40,10 @@ public class Player {
         darken.dispose();
         resized.dispose();
 
+        selector = new Texture("Sprites/selector.png");
+
         inventory = new Array<>();
+        selected = 0;
         inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
             @Override
             public boolean use(Player player, Entity interaction) {
@@ -76,6 +81,12 @@ public class Player {
             batch.begin();
             batch.draw(dark, 0, 0);
             batch.end();
+
+            if (inventory.size > 1) {
+                batch.begin();
+                batch.draw(selector, selected * 48 + 464 - ((inventory.size - 1) * 32 + (inventory.size - 2) * 16) / 2, 272);
+                batch.end();
+            }
 
             for (int i = 0; i < inventory.size; i++) {
                 inventory.get(i).draw(batch, 48 * i + 480 - ((inventory.size - 1) * 32 + (inventory.size - 2) * 16) / 2 - 8, 320);
@@ -118,5 +129,29 @@ public class Player {
 
     public boolean isInInventory() {
         return renderState == -1;
+    }
+
+    public void selectL() {
+        if (inventory.size > 1) {
+            selected--;
+            if (selected < 0) {
+                selected = (byte) (inventory.size - 1);
+            }
+        } else {
+            selected = 0;
+        }
+    }
+
+    public void selectR() {
+        if (inventory.size > 1) {
+            selected++;
+            selected %= inventory.size;
+        } else {
+            selected = 0;
+        }
+    }
+
+    public void useItem(Map map) {
+        inventory.get(selected).use(this, map.getNearestEntity((int) (rectangle.x + 8), (int) (rectangle.y + 16)));
     }
 }

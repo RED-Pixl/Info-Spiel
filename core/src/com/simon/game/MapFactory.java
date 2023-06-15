@@ -1,6 +1,7 @@
 package com.simon.game;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
@@ -25,11 +26,16 @@ public class MapFactory{
 
                     @Override
                     public void enter() {
-                        System.out.println("You entered room 1");
+
                     }
                 };
             case 1:
-                return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam) {
+                return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam, new Item(new Texture("Sprites/item.png"), 480, 256, "Test-Item") {
+                    @Override
+                    public boolean use(Player player, Entity interaction) {
+                        return false;
+                    }
+                }) {
 
                     @Override
                     public byte keepInBounds(Player player) {
@@ -46,7 +52,7 @@ public class MapFactory{
 
                     @Override
                     public void enter() {
-                        System.out.println("You entered room 2");
+
                     }
                 };
         }

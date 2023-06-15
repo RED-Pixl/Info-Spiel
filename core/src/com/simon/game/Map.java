@@ -42,4 +42,8 @@ public abstract class Map {
             }
         }
     }
+
+    public void removeEntity(Entity entity) {
+        entities.removeValue(entity, true);
+    }
 }

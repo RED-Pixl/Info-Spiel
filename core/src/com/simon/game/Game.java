@@ -79,6 +79,9 @@ public class Game extends ApplicationAdapter {
 							player.selectR();
 						}
 						return super.keyDown(keycode);
+					case Input.Keys.F:
+						maps[mapId].pickUp(player);
+						System.out.println("Hallöchen");
 				}
 				return super.keyDown(keycode);
 			}

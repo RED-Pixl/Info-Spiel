@@ -154,4 +154,12 @@ public class Player {
     public void useItem(Map map) {
         inventory.get(selected).use(this, map.getNearestEntity((int) (rectangle.x + 8), (int) (rectangle.y + 16)));
     }
+
+    public int getX() {
+        return (int) rectangle.x;
+    }
+
+    public int getY() {
+        return (int) rectangle.y;
+    }
 }

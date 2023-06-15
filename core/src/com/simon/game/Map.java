@@ -54,4 +54,13 @@ public abstract class Map {
         Optional<Entity> res = Arrays.stream(entities.toArray()).min((a, b) ->((b.x + x)^2 + (b.y + y)^2) - ((a.x + x)^2 + (a.y + y)^2));
         return res.orElse(null);
     }
+
+    public void pickUp(Player player) {
+        Optional<Entity> itemOpt = Arrays.stream(entities.toArray()).filter((a) -> a instanceof Item).filter((a) -> ((a.x + player.getX())^2 + (a.y + player.getY())^2) <= 4096).min((a, b) ->((b.x + player.getX())^2 + (b.y + player.getY())^2) - ((a.x + player.getX())^2 + (a.y + player.getY())^2));
+        if (itemOpt.isPresent()) {
+            Item item = (Item) itemOpt.get();
+            removeEntity(item);
+            player.addToInventory(item);
+        }
+    }
 }

@@ -13,6 +13,10 @@ public class MapFactory{
 
                     @Override
                     public byte keepInBounds(Player player) {
+                        for (int i = 0; i < entities.size; i++) {
+                            entities.get(i).collision(player);
+                        }
+
                         checkPos(player, 320, 624, 224, 384);
 
                         if (player.getRectangle().contains(new Vector2(480, 416)) && player.posYDelta == 1) {
@@ -30,15 +34,26 @@ public class MapFactory{
                     }
                 };
             case 1:
-                return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam, new Item(new Texture("Sprites/item.png"), 480, 256, "Test-Item") {
-                    @Override
-                    public boolean use(Player player, Entity interaction) {
-                        return false;
-                    }
-                }) {
+                return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam,
+                        new Item(new Texture("Sprites/item.png"), 480, 256, "Test-Item") {
+                            @Override
+                            public boolean use(Player player, Entity interaction) {
+                                return false;
+                            }
+                        },
+                        new Item(new Texture("Sprites/item.png"), 480, 32*12, "Test-Item") {
+                            @Override
+                            public boolean use(Player player, Entity interaction) {
+                                return false;
+                            }
+                        }) {
 
                     @Override
                     public byte keepInBounds(Player player) {
+                        for (int i = 0; i < entities.size; i++) {
+                            entities.get(i).collision(player);
+                        }
+
                         checkPos(player, 352, 592, 160, 448);
 
                         if (player.getRectangle().contains(new Vector2(480, 160)) && player.posYDelta == -1) {

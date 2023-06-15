@@ -18,12 +18,17 @@ public class Player {
     private final Texture dark;
     private byte selected;
     private Texture selector;
+    private float lastDeltaX;
+    private float lastDeltaY;
 
 
     public Player() {
         rectangle = new Rectangle(472, 304, 16, 32);
         posXDelta = 0;
         posYDelta = 0;
+
+        lastDeltaX = 0;
+        lastDeltaY = 0;
 
         sprintFac = 35;
         renderState = 0;
@@ -44,6 +49,18 @@ public class Player {
 
         inventory = new Array<>();
         selected = 0;
+        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
+            @Override
+            public boolean use(Player player, Entity interaction) {
+                return false;
+            }
+        });
+        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
+            @Override
+            public boolean use(Player player, Entity interaction) {
+                return false;
+            }
+        });
         inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
             @Override
             public boolean use(Player player, Entity interaction) {
@@ -100,8 +117,10 @@ public class Player {
                 renderState++;
                 renderState %= 100;
                 float frameTime = Gdx.graphics.getDeltaTime();
-                rectangle.x += posXDelta * getSprintFac() * frameTime;
-                rectangle.y += posYDelta * getSprintFac() * frameTime;
+                lastDeltaX = posXDelta * getSprintFac() * frameTime;
+                rectangle.x += lastDeltaX;
+                lastDeltaY = posYDelta * getSprintFac() * frameTime;
+                rectangle.y += lastDeltaY;
             } else {
                 renderState = 0;
             }
@@ -153,5 +172,18 @@ public class Player {
 
     public void useItem(Map map) {
         inventory.get(selected).use(this, map.getNearestEntity((int) (rectangle.x + 8), (int) (rectangle.y + 16)));
+    }
+
+    public int getX() {
+        return (int) rectangle.x;
+    }
+
+    public int getY() {
+        return (int) rectangle.y;
+    }
+
+    public void revertMovement() {
+        rectangle.x -= lastDeltaX;
+        rectangle.y -= lastDeltaY;
     }
 }

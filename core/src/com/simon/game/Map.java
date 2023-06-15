@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public abstract class Map {
     private final int width;
     private final int height;
     private final TiledMap map;
-    private final Array<Entity> entities;
+    protected final Array<Entity> entities;
     private final TiledMapRenderer renderer;
     private final Camera cam;
 
@@ -51,7 +52,17 @@ public abstract class Map {
     }
 
     public Entity getNearestEntity(int x, int y) {
-        Optional<Entity> res = Arrays.stream(entities.toArray()).min((a, b) ->((b.x + x)^2 + (b.y + y)^2) - ((a.x + x)^2 + (a.y + y)^2));
+        Optional<Entity> res = Arrays.stream(entities.toArray()).min((a, b) ->((b.getX() - x)^2 + (b.getY() - y)^2) - ((a.getX() - x)^2 + (a.getY() - y)^2));
         return res.orElse(null);
+    }
+
+    public void pickUp(Player player) {
+        Optional<Entity> itemOpt = Arrays.stream(entities.toArray()).filter((a) -> a instanceof Item).filter((a) -> (new Point(a.getX(), a.getY()).distance(player.getX() + 8, player.getY() + 16) <= 64)).min((a, b) -> (int) (new Point(a.getX(), a.getY()).distance(player.getX() + 8, player.getY() + 16) - new Point(b.getX(), b.getY()).distance(player.getX() + 8, player.getY() + 16)));
+        if (itemOpt.isPresent()) {
+            Item item = (Item) itemOpt.get();
+            System.out.println((item.getX() - player.getX())^2 + (item.getY() - player.getY())^2);
+            removeEntity(item);
+            player.addToInventory(item);
+        }
     }
 }

@@ -8,12 +8,12 @@ public abstract class Item extends Entity {
     private final Texture texture;
 
     public Item(Texture texture, int x, int y, String name, Map map) {
-        super(x, y, name, map);
+        super(x, y, name, map, (byte) 32, (byte) 32);
         this.texture = texture;
     }
 
     public Item(Texture texture, int x, int y, String name) {
-        super(x, y, name, null);
+        super(x, y, name, null, (byte) 32, (byte) 32);
         this.texture = texture;
     }
 
@@ -28,13 +28,13 @@ public abstract class Item extends Entity {
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-        batch.draw(texture, x - 16, y - 16);
+        batch.draw(texture, rectangle.x, rectangle.y);
         batch.end();
     }
 
     public void draw(SpriteBatch batch, int x, int y) {
         batch.begin();
-        batch.draw(texture, x - 16, y - 16);
+        batch.draw(texture, rectangle.x, rectangle.y);
         batch.end();
     }
 }

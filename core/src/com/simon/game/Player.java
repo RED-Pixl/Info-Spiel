@@ -17,7 +17,7 @@ public class Player {
     private final Array<Item> inventory;
     private final Texture dark;
     private byte selected;
-    private Texture selector;
+    private final Texture selector;
     private float lastDeltaX;
     private float lastDeltaY;
 
@@ -33,9 +33,12 @@ public class Player {
         sprintFac = 35;
         renderState = 0;
 
-        playerTexture = new Texture[2];
-        playerTexture[0] = new Texture(Gdx.files.internal("Sprites/char.png"));
-        playerTexture[1] = new Texture(Gdx.files.internal("Sprites/charWalk.png"));
+        playerTexture = new Texture[5];
+        playerTexture[0] = new Texture(Gdx.files.internal("Sprites/playerIdle.png"));
+        playerTexture[1] = new Texture(Gdx.files.internal("Sprites/playerFront1.png"));
+        playerTexture[2] = new Texture(Gdx.files.internal("Sprites/playerFront2.png"));
+        playerTexture[3] = new Texture(Gdx.files.internal("Sprites/playerBack1.png"));
+        playerTexture[4] = new Texture(Gdx.files.internal("Sprites/playerBack2.png"));
 
         Pixmap darken = new Pixmap(Gdx.files.internal("Sprites/dark.png"));
         Pixmap resized = new Pixmap(960, 640, darken.getFormat());
@@ -49,12 +52,6 @@ public class Player {
 
         inventory = new Array<>();
         selected = 0;
-        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
-            @Override
-            public boolean use(Player player, Entity interaction) {
-                return false;
-            }
-        });
         inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
             @Override
             public boolean use(Player player, Entity interaction) {
@@ -87,9 +84,19 @@ public class Player {
 
     public void draw(SpriteBatch batch) {
         if (renderState != -1) {
-            batch.begin();
-            batch.draw(playerTexture[(renderState / 15) % playerTexture.length], rectangle.x, rectangle.y);
-            batch.end();
+            if (posXDelta == 0 && posYDelta == -1) {
+                batch.begin();
+                batch.draw(playerTexture[1 + (renderState / 15) % 2], rectangle.x, rectangle.y);
+                batch.end();
+            } else if (posXDelta == 0 && posYDelta == 1) {
+                batch.begin();
+                batch.draw(playerTexture[3 + (renderState / 15) % 2], rectangle.x, rectangle.y);
+                batch.end();
+            } else {
+                batch.begin();
+                batch.draw(playerTexture[0], rectangle.x, rectangle.y);
+                batch.end();
+            }
         } else {
             batch.begin();
             batch.draw(playerTexture[0], rectangle.x, rectangle.y);
@@ -106,7 +113,7 @@ public class Player {
             }
 
             for (int i = 0; i < inventory.size; i++) {
-                inventory.get(i).draw(batch, 48 * i + 480 - ((inventory.size - 1) * 32 + (inventory.size - 2) * 16) / 2 - 8, 320);
+                inventory.get(i).draw(batch, 48 * i + 464 - ((inventory.size - 1) * 32 + (inventory.size - 2) * 16) / 2 - 8, 304);
             }
         }
     }

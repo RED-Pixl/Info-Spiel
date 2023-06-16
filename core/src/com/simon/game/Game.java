@@ -43,7 +43,11 @@ public class Game extends ApplicationAdapter {
 			public boolean keyDown(int keycode) {
 				switch (keycode) {
 					case Input.Keys.ESCAPE:
-						Gdx.app.exit();
+						if (player.isInInventory()) {
+							player.closeInventory();
+						} else {
+							Gdx.app.exit();
+						}
 						return super.keyDown(keycode);
 					case Input.Keys.W:
 						player.posYDelta++;

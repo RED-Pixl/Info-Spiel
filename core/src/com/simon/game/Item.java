@@ -34,7 +34,7 @@ public abstract class Item extends Entity {
 
     public void draw(SpriteBatch batch, int x, int y) {
         batch.begin();
-        batch.draw(texture, rectangle.x, rectangle.y);
+        batch.draw(texture, x, y);
         batch.end();
     }
 }

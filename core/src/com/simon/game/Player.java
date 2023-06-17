@@ -33,12 +33,16 @@ public class Player {
         sprintFac = 35;
         renderState = 0;
 
-        playerTexture = new Texture[5];
+        playerTexture = new Texture[9];
         playerTexture[0] = new Texture(Gdx.files.internal("Sprites/playerIdle.png"));
         playerTexture[1] = new Texture(Gdx.files.internal("Sprites/playerFront1.png"));
         playerTexture[2] = new Texture(Gdx.files.internal("Sprites/playerFront2.png"));
         playerTexture[3] = new Texture(Gdx.files.internal("Sprites/playerBack1.png"));
         playerTexture[4] = new Texture(Gdx.files.internal("Sprites/playerBack2.png"));
+        playerTexture[5] = new Texture(Gdx.files.internal("Sprites/playerLeft1.png"));
+        playerTexture[6] = new Texture(Gdx.files.internal("Sprites/playerLeft2.png"));
+        playerTexture[7] = new Texture(Gdx.files.internal("Sprites/playerRight1.png"));
+        playerTexture[8] = new Texture(Gdx.files.internal("Sprites/playerRight2.png"));
 
         Pixmap darken = new Pixmap(Gdx.files.internal("Sprites/dark.png"));
         Pixmap resized = new Pixmap(960, 640, darken.getFormat());
@@ -52,6 +56,12 @@ public class Player {
 
         inventory = new Array<>();
         selected = 0;
+        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
+            @Override
+            public boolean use(Player player, Entity interaction) {
+                return false;
+            }
+        });
         inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
             @Override
             public boolean use(Player player, Entity interaction) {
@@ -84,13 +94,21 @@ public class Player {
 
     public void draw(SpriteBatch batch) {
         if (renderState != -1) {
-            if (posXDelta == 0 && posYDelta == -1) {
+            if (posYDelta == -1) {
                 batch.begin();
                 batch.draw(playerTexture[1 + (renderState / 15) % 2], rectangle.x, rectangle.y);
                 batch.end();
-            } else if (posXDelta == 0 && posYDelta == 1) {
+            } else if (posYDelta == 1) {
                 batch.begin();
                 batch.draw(playerTexture[3 + (renderState / 15) % 2], rectangle.x, rectangle.y);
+                batch.end();
+            } else if (posXDelta == -1) {
+                batch.begin();
+                batch.draw(playerTexture[5 + (renderState / 15) % 2], rectangle.x, rectangle.y);
+                batch.end();
+            } else if (posXDelta == 1) {
+                batch.begin();
+                batch.draw(playerTexture[7 + (renderState / 15) % 2], rectangle.x, rectangle.y);
                 batch.end();
             } else {
                 batch.begin();

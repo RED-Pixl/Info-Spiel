@@ -7,13 +7,13 @@ public abstract class Item extends Entity {
 
     private final Texture texture;
 
-    public Item(Texture texture, int x, int y, String name, Map map) {
-        super(x, y, name, map, (byte) 32, (byte) 32);
+    public Item(Texture texture, int x, int y, Map map) {
+        super(x, y, map, (byte) 32, (byte) 32, false);
         this.texture = texture;
     }
 
-    public Item(Texture texture, int x, int y, String name) {
-        super(x, y, name, null, (byte) 32, (byte) 32);
+    public Item(Texture texture, int x, int y) {
+        super(x, y, null, (byte) 32, (byte) 32, false);
         this.texture = texture;
     }
 

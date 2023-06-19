@@ -6,17 +6,13 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class Entity {
 
     protected Rectangle rectangle;
-    private final String name;
     protected Map map;
+    protected boolean collide;
 
-    public Entity(int x, int y, String name, Map map, byte width, byte height) {
+    public Entity(int x, int y, Map map, byte width, byte height, boolean collide) {
         rectangle = new Rectangle(x, y, width, height);
-        this.name = name;
         this.map = map;
-    }
-
-    public String getName() {
-        return name;
+        this.collide = collide;
     }
 
     public abstract void draw(SpriteBatch batch);
@@ -28,8 +24,10 @@ public abstract class Entity {
     }
 
     public void collision(Player player) {
-        while (player.getRectangle().overlaps(rectangle)) {
-            player.revertMovement();
+        if (collide) {
+            while (player.getRectangle().overlaps(rectangle)) {
+                player.revertMovement();
+            }
         }
     }
 

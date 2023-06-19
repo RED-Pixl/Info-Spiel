@@ -35,13 +35,13 @@ public class MapFactory{
                 };
             case 1:
                 return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam,
-                        new Item(new Texture("Sprites/item.png"), 480, 256, "Test-Item") {
+                        new Item(new Texture("Sprites/item.png"), 480, 256) {
                             @Override
                             public boolean use(Player player, Entity interaction) {
                                 return false;
                             }
                         },
-                        new Item(new Texture("Sprites/item.png"), 480, 32*12, "Test-Item") {
+                        new Item(new Texture("Sprites/item.png"), 480, 32*12) {
                             @Override
                             public boolean use(Player player, Entity interaction) {
                                 return false;

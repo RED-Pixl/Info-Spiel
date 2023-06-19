@@ -74,6 +74,12 @@ public class Player {
                 return false;
             }
         });
+        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0, "Test-Item") {
+            @Override
+            public boolean use(Player player, Entity interaction) {
+                return false;
+            }
+        });
     }
 
     public void startSprint() {

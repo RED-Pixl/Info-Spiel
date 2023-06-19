@@ -20,7 +20,7 @@ public class Game extends ApplicationAdapter {
 	private byte mapId;
 	private boolean firstFrame;
 	private Texture logo;
-	
+
 	@Override
 	public void create () {
 		viewportWidth = 32 * 30;
@@ -38,10 +38,6 @@ public class Game extends ApplicationAdapter {
 		maps = new Map[2];
 		maps[0] = MapFactory.create(0, cam);
 		maps[0].enter();
-
-		// Startup Animation
-		firstFrame = true;
-		logo = new Texture(Gdx.files.internal("Sprites/title.png"));
 
 		// Input Processor for managing the keyboard inputs
 		Gdx.input.setInputProcessor(new InputAdapter() {
@@ -91,13 +87,6 @@ public class Game extends ApplicationAdapter {
 						return super.keyDown(keycode);
 					case Input.Keys.F:
 						maps[mapId].pickUp(player);
-					case Input.Keys.SPACE:
-						player.useItem(maps[mapId]);
-					case Input.Keys.ENTER:
-						if (firstFrame) {
-							firstFrame = false;
-							logo.dispose();
-						}
 				}
 				return super.keyDown(keycode);
 			}
@@ -130,16 +119,10 @@ public class Game extends ApplicationAdapter {
 	public void render () {
 		ScreenUtils.clear(Color.BLACK);
 		viewport.apply();
+		maps[mapId].draw(spriteBatch);
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-		if (firstFrame) {
-			spriteBatch.begin();
-			spriteBatch.draw(logo, 0, 0);
-			spriteBatch.end();
-		} else {
-			maps[mapId].draw(spriteBatch);
-			player.draw(spriteBatch);
-			act();
-		}
+		player.draw(spriteBatch);
+		act();
 	}
 
 	private void act() {

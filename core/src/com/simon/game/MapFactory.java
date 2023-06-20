@@ -6,11 +6,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
 public class MapFactory{
-    public static Map create (int mapId, Camera cam) {
+    public static Map create (int mapId, Camera cam, Map[] maps) {
         switch (mapId) {
             case 0:
                 // SMV-Zimmer
-                return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam) {
+                return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam, new Door(320, 320, maps[0], (byte) 0, "very secure key")) {
 
                     @Override
                     public byte keepInBounds(Player player) {

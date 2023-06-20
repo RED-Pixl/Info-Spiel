@@ -36,7 +36,7 @@ public class Game extends ApplicationAdapter {
 		// Managing maps
 		mapId = 0;
 		maps = new Map[2];
-		maps[0] = MapFactory.create(0, cam);
+		maps[0] = MapFactory.create(0, cam, maps);
 		maps[0].enter();
 
 		// Startup Animation
@@ -146,7 +146,7 @@ public class Game extends ApplicationAdapter {
 		// updating the map
 		if (mapId != (mapId = maps[mapId].keepInBounds(player))) {
 			if (maps[mapId] == null) {
-				maps[mapId] = MapFactory.create(mapId, cam);
+				maps[mapId] = MapFactory.create(mapId, cam, maps);
 			}
 			maps[mapId].enter();
 		}

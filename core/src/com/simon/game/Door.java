@@ -13,7 +13,7 @@ public class Door extends Entity{
     private byte facing;
 
     public Door(int x, int y, Map map, byte facing, String key) {
-        super(x, y, map, (byte) 32, (byte) 32, true);
+        super(x - 16, y - 16, map, (byte) 32, (byte) 32, true);
         keyCode = key;
         this.facing = facing;
         switch (facing) {

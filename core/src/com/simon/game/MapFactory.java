@@ -9,6 +9,7 @@ public class MapFactory{
     public static Map create (int mapId, Camera cam) {
         switch (mapId) {
             case 0:
+                // SMV-Zimmer
                 return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam) {
 
                     @Override

@@ -74,12 +74,7 @@ public class Player {
                 return false;
             }
         });
-        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0) {
-            @Override
-            public boolean use(Player player, Entity interaction) {
-                return false;
-            }
-        });
+        inventory.add(new Key(new Texture(Gdx.files.internal("Sprites/key.png")), 0, 0, 1));
     }
 
     public void startSprint() {

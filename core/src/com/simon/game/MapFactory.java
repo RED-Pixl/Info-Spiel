@@ -10,7 +10,7 @@ public class MapFactory{
         switch (mapId) {
             case 0:
                 // SMV-Zimmer
-                return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam, new Door(320, 320, maps[0], (byte) 0, "very secure key")) {
+                return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam, new Door(32 * 14 + 16, 32 * 13 - 8, maps[0], (byte) 0, 1, false)) {
 
                     @Override
                     public byte keepInBounds(Player player) {

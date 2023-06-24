@@ -6,38 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Door extends Entity{
 
-    private int keyCode;
+    private final int keyCode;
     private Texture texture;
-    private byte facing;
 
-    public Door(int x, int y, Map map, byte facing, int key, boolean open) {
+    public Door(int x, int y, Map map, int key, boolean open) {
         super(x, y, map, (byte) 32, (byte) 32, true);
         keyCode = key;
-        this.facing = facing;
         if (!open) {
-            switch (facing) {
-                case 0:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorNorthClosed.png"));
-                case 1:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorEastClosed.png"));
-                case 2:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorSouthClosed.png"));
-                case 3:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorWestClosed.png"));
-            }
+            texture = new Texture(Gdx.files.internal("Sprites/doorClosed.png"));
         } else {
-            switch (facing) {
-                case 0:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorNorthOpen.png"));
-                case 1:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorEastOpen.png"));
-                case 2:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorSouthOpen.png"));
-                case 3:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorWestOpen.png"));
-            }
-            collide = false;
+            texture = new Texture(Gdx.files.internal("Sprites/doorOpen.png"));
         }
+        collide = !open;
     }
 
     @Override
@@ -52,20 +32,16 @@ public class Door extends Entity{
 
     }
 
+    @Override
+    public void dispose() {
+        texture.dispose();
+    }
+
     public void open(int code) {
         if (code == keyCode) {
             collide = false;
             texture.dispose();
-            switch (facing) {
-                case 0:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorNorthOpen.png"));
-                case 1:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorEastOpen.png"));
-                case 2:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorSouthOpen.png"));
-                case 3:
-                    texture = new Texture(Gdx.files.internal("Sprites/doorWestOpen.png"));
-            }
+            texture = new Texture(Gdx.files.internal("Sprites/doorOpen.png"));
         }
     }
 }

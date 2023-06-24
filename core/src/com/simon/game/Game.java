@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -35,7 +36,7 @@ public class Game extends ApplicationAdapter {
 
 		// Managing maps
 		mapId = 0;
-		maps = new Map[2];
+		maps = new Map[100];
 		maps[0] = MapFactory.create(0, cam, maps);
 		maps[0].enter();
 
@@ -103,21 +104,26 @@ public class Game extends ApplicationAdapter {
 			@Override
 			public boolean keyUp(int keycode) {
 				switch (keycode) {
-					case Input.Keys.W:
+					case Input.Keys.W -> {
 						player.posYDelta--;
 						return super.keyUp(keycode);
-					case Input.Keys.S:
+					}
+					case Input.Keys.S -> {
 						player.posYDelta++;
 						return super.keyUp(keycode);
-					case Input.Keys.D:
+					}
+					case Input.Keys.D -> {
 						player.posXDelta--;
 						return super.keyUp(keycode);
-					case Input.Keys.A:
+					}
+					case Input.Keys.A -> {
 						player.posXDelta++;
 						return super.keyUp(keycode);
-					case Input.Keys.CONTROL_LEFT:
+					}
+					case Input.Keys.CONTROL_LEFT -> {
 						player.endSprint();
 						return super.keyUp(keycode);
+					}
 				}
 				return super.keyUp(keycode);
 			}

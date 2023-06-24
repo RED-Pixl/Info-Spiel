@@ -37,4 +37,8 @@ public abstract class Item extends Entity {
         batch.draw(texture, x, y);
         batch.end();
     }
+
+    public void dispose() {
+        texture.dispose();
+    }
 }

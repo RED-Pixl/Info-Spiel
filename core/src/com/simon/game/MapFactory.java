@@ -1,7 +1,9 @@
 package com.simon.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,22 +12,20 @@ public class MapFactory{
         switch (mapId) {
             case 0:
                 // SMV-Zimmer
-                return new Map(320, 192, new TmxMapLoader().load("00.tmx"), cam, new Door(32 * 14 + 16, 32 * 13 - 8, maps[0], (byte) 0, 1, false)) {
-
+                return new Map(new TmxMapLoader().load("00.tmx"), cam,
+                        new Door(0, 0, maps[0], 0, false)) {
                     @Override
                     public byte keepInBounds(Player player) {
-                        for (int i = 0; i < entities.size; i++) {
-                            entities.get(i).collision(player);
+                        if (player.getX() < 11 * 32) {
+                            player.getRectangle().x = 11 * 23;
+                        } else if (player.getX() + player.getRectangle().width > 19 * 32) {
+                            player.getRectangle().x = 19 * 32 - player.getRectangle().width;
                         }
-
-                        checkPos(player, 320, 624, 224, 384);
-
-                        if (player.getRectangle().contains(new Vector2(480, 416)) && player.posYDelta == 1) {
-                            player.getRectangle().x = 15 * 32 - player.getRectangle().width / 2;
-                            player.getRectangle().y = 5 * 32 + 1;
-                            return 1;
+                        if (player.getY() < 8 * 32) {
+                            player.getRectangle().y = 8 * 32;
+                        } else if (player.getY() + player.getRectangle().height > 12 * 32 + 16) {
+                            player.getRectangle().y = 12 * 32 + 16 - player.getRectangle().height;
                         }
-
                         return 0;
                     }
 
@@ -35,42 +35,7 @@ public class MapFactory{
                     }
                 };
             case 1:
-                return new Map(256, 192, new TmxMapLoader().load("01.tmx"), cam,
-                        new Item(new Texture("Sprites/item.png"), 480, 256) {
-                            @Override
-                            public boolean use(Player player, Entity interaction) {
-                                return false;
-                            }
-                        },
-                        new Item(new Texture("Sprites/item.png"), 480, 32*12) {
-                            @Override
-                            public boolean use(Player player, Entity interaction) {
-                                return false;
-                            }
-                        }) {
 
-                    @Override
-                    public byte keepInBounds(Player player) {
-                        for (int i = 0; i < entities.size; i++) {
-                            entities.get(i).collision(player);
-                        }
-
-                        checkPos(player, 352, 592, 160, 448);
-
-                        if (player.getRectangle().contains(new Vector2(480, 160)) && player.posYDelta == -1) {
-                            player.getRectangle().x = 15 * 32 - player.getRectangle().width / 2;
-                            player.getRectangle().y = 13 * 32 - player.getRectangle().height - 1;
-                            return 0;
-                        }
-
-                        return 1;
-                    }
-
-                    @Override
-                    public void enter() {
-
-                    }
-                };
         }
         return null;
     }

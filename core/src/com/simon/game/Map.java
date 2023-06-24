@@ -13,16 +13,12 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public abstract class Map {
-    private final int width;
-    private final int height;
     private final TiledMap map;
     protected final Array<Entity> entities;
     private final TiledMapRenderer renderer;
     private final Camera cam;
 
-    public Map(int width, int height, TiledMap map, Camera cam, Entity... entities) {
-        this.width = width;
-        this.height = height;
+    public Map(TiledMap map, Camera cam, Entity... entities) {
         this.map = map;
         this.entities = new Array<>(entities);
         this.renderer = new OrthogonalTiledMapRenderer(map);
@@ -52,7 +48,7 @@ public abstract class Map {
     }
 
     public Entity getNearestEntity(int x, int y) {
-        Optional<Entity> res = Arrays.stream(entities.toArray()).min((a, b) ->((b.getX() - x)^2 + (b.getY() - y)^2) - ((a.getX() - x)^2 + (a.getY() - y)^2));
+        Optional<Entity> res = Arrays.stream(entities.toArray()).filter((a) -> (new Point(a.getX(), a.getY()).distance(x + 8, y + 16) <= 64)).min((a, b) ->((b.getX() - x)^2 + (b.getY() - y)^2) - ((a.getX() - x)^2 + (a.getY() - y)^2));
         return res.orElse(null);
     }
 

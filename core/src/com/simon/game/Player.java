@@ -161,6 +161,9 @@ public class Player {
         for (Texture texture : playerTexture) {
             texture.dispose();
         }
+        for (Item item : inventory) {
+            item.dispose();
+        }
         dark.dispose();
     }
 

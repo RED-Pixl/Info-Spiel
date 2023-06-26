@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class MapFactory{
@@ -96,7 +97,32 @@ public class MapFactory{
                 };
             case 1:
                 // Aula
-                return new Map(new TmxMapLoader().load("01.tmx"), cam) {
+                return new Map(new TmxMapLoader().load("01.tmx"), cam, new Entity(7 * 32, 13 * 32, maps[1], (short) 320, (short) 128, false) {
+
+                    private final Texture texture = new Texture(Gdx.files.internal("Sprites/stage.png"));
+
+                    @Override
+                    public void draw(SpriteBatch batch) {
+                        batch.begin();
+                        batch.draw(texture, getX(), getY());
+                        batch.end();
+                    }
+
+                    @Override
+                    public void dispose() {
+                        texture.dispose();
+                    }
+                }, new Entity(8 * 32, 14 * 32 + 16, maps[1], (short) 256, (short) 96, true) {
+                    @Override
+                    public void draw(SpriteBatch batch) {
+
+                    }
+
+                    @Override
+                    public void dispose() {
+
+                    }
+                }) {
                     @Override
                     public byte keepInBounds(Player player) {
                         if (player.getX() < 1 * 32) {
@@ -123,7 +149,7 @@ public class MapFactory{
                             return 0;
                         }
 
-                        if (player.getRectangle().contains(new Vector2(1 * 32, 10 * 32))) {
+                        if (player.getRectangle().overlaps(new Rectangle(1 * 32 + 1, 8 * 32 + 16, 0, 2 * 32))) {
                             player.setX(19 * 32);
                             player.setY(9 * 32);
                             return 2;
@@ -167,7 +193,7 @@ public class MapFactory{
                             player.setY((int) (17 * 32 + 16 - player.getRectangle().height));
                         }
 
-                        if (player.getRectangle().contains(new Vector2(20 * 32, 9 * 32))) {
+                        if (player.getRectangle().overlaps(new Rectangle(20 * 32, 8 * 32 + 16, 0, 2 * 32))) {
                             player.setX(2 * 32);
                             player.setY(9 * 32);
                             return 1;
@@ -177,6 +203,12 @@ public class MapFactory{
                             player.setX(10 * 32 + 8);
                             player.setY(14 * 32 - 16);
                             return 3;
+                        }
+
+                        if (player.getRectangle().contains(new Vector2(13 * 32, 17 * 32))) {
+                            player.setX(10 * 32 + 8);
+                            player.setY(14 * 32 - 16);
+                            return 4;
                         }
 
                         for (Entity entity : entities) {
@@ -218,6 +250,37 @@ public class MapFactory{
                         }
 
                         return 3;
+                    }
+
+                    @Override
+                    public void enter() {
+
+                    }
+                };
+            case 4:
+                return new Map(new TmxMapLoader().load("04.tmx"), cam,
+                        new Door(10 * 32, 15 * 32 - 6, maps[3], 1, true)) {
+                    @Override
+                    public byte keepInBounds(Player player) {
+                        if (player.getX() < 8 * 32) {
+                            player.setX(8 * 32);
+                        } else if (player.getX() + player.getRectangle().width > 22 * 32) {
+                            player.setX((int) (22 * 32 - player.getRectangle().width));
+                        }
+
+                        if (player.getY() < 5 * 32) {
+                            player.setY(5 * 32);
+                        } else if (player.getY() + player.getRectangle().height > 15 * 32 + 16) {
+                            player.setY((int) (15 * 32 + 16 - player.getRectangle().height));
+                        }
+
+                        if (player.getRectangle().contains(new Vector2(10 * 32 + 16, 15 * 32))) {
+                            player.setX(13 * 32 - 8);
+                            player.setY(16 * 32 - 16);
+                            return 2;
+                        }
+
+                        return 4;
                     }
 
                     @Override

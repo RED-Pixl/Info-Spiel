@@ -20,15 +20,19 @@ public class Player {
     private final Texture selector;
     private float lastDeltaX;
     private float lastDeltaY;
+    private int map;
+    private Map[] maps;
 
-
-    public Player() {
+    public Player(Map[] maps) {
         rectangle = new Rectangle(472, 304, 16, 32);
         posXDelta = 0;
         posYDelta = 0;
 
         lastDeltaX = 0;
         lastDeltaY = 0;
+
+        map = 0;
+        this.maps = maps;
 
         sprintFac = 35;
         renderState = 0;
@@ -203,5 +207,17 @@ public class Player {
     public void revertMovement() {
         rectangle.x -= lastDeltaX;
         rectangle.y -= lastDeltaY;
+    }
+
+    public void removeFromInv(Item item) {
+        inventory.removeValue(item, true);
+    }
+
+    public Map getMap() {
+        return maps[map];
+    }
+
+    public void updateMap(int map) {
+        this.map = map;
     }
 }

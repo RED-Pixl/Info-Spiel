@@ -60,4 +60,8 @@ public abstract class Map {
             player.addToInventory(item);
         }
     }
+
+    public void addEntity(Entity entity) {
+        entities.add(entity);
+    }
 }

@@ -31,14 +31,15 @@ public class Game extends ApplicationAdapter {
 		cam = new OrthographicCamera();
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
-		// Setting up everything regarding the player-character
-		player = new Player();
-
 		// Managing maps
 		mapId = 0;
 		maps = new Map[100];
 		maps[mapId] = MapFactory.create(mapId, cam, maps);
 		maps[mapId].enter();
+
+		// Setting up everything regarding the player-character
+		player = new Player(maps);
+		player.updateMap(mapId);
 
 		// Startup Animation
 		firstFrame = true;
@@ -156,6 +157,7 @@ public class Game extends ApplicationAdapter {
 
 		// updating the map
 		if (mapId != (mapId = maps[mapId].keepInBounds(player))) {
+			player.updateMap(mapId);
 			if (maps[mapId] == null) {
 				maps[mapId] = MapFactory.create(mapId, cam, maps);
 			}

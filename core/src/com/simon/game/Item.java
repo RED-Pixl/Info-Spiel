@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Item extends Entity {
 
-    private final Texture texture;
+    protected Texture texture;
 
     public Item(Texture texture, int x, int y, Map map) {
         super(x, y, map, (byte) 32, (byte) 32, false);
@@ -36,6 +36,11 @@ public abstract class Item extends Entity {
         batch.begin();
         batch.draw(texture, x, y);
         batch.end();
+    }
+
+    protected void setPos(int x, int y) {
+        rectangle.x = x;
+        rectangle.y = y;
     }
 
     public void dispose() {

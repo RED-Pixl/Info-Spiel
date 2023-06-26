@@ -122,7 +122,7 @@ public class MapFactory{
                     public void dispose() {
 
                     }
-                }) {
+                }, new Door(19 * 32 + 16, 16 * 32 - 6, maps[1], 2, false)) {
                     @Override
                     public byte keepInBounds(Player player) {
                         if (player.getX() < 1 * 32) {
@@ -153,6 +153,10 @@ public class MapFactory{
                             player.setX(19 * 32);
                             player.setY(9 * 32);
                             return 2;
+                        }
+
+                        if (player.getRectangle().contains(new Vector2(20 * 32, 16 * 32))) {
+                            return 5;
                         }
 
                         return 1;
@@ -226,6 +230,7 @@ public class MapFactory{
                     }
                 };
             case 3:
+                // NuT-Raum 1
                 return new Map(new TmxMapLoader().load("03.tmx"), cam,
                         new Door(10 * 32, 15 * 32 - 6, maps[3], 1, true),
                         new Key(new Texture(Gdx.files.internal("Sprites/keyYellow.png")), 10 * 32, 10 * 32, 1)) {
@@ -258,8 +263,10 @@ public class MapFactory{
                     }
                 };
             case 4:
+                // NuT-Raum 2
                 return new Map(new TmxMapLoader().load("04.tmx"), cam,
-                        new Door(10 * 32, 15 * 32 - 6, maps[3], 1, true)) {
+                        new Door(10 * 32, 15 * 32 - 6, maps[3], 1, true),
+                        new ExplosiveStuff(10 * 32, 10 * 32, maps[4])) {
                     @Override
                     public byte keepInBounds(Player player) {
                         if (player.getX() < 8 * 32) {
@@ -281,6 +288,21 @@ public class MapFactory{
                         }
 
                         return 4;
+                    }
+
+                    @Override
+                    public void enter() {
+                        if (entities.size < 2) {
+                            entities.add(new ExplosiveStuff(10 * 32, 10 * 32, maps[4]));
+                        }
+                    }
+                };
+            case 5:
+                // Lehrerzimmer
+                return new Map(new TmxMapLoader().load("05.tmx"), cam) {
+                    @Override
+                    public byte keepInBounds(Player player) {
+                        return 5;
                     }
 
                     @Override

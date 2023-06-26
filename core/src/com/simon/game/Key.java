@@ -6,7 +6,7 @@ public class Key extends Item{
 
     private final int keyCode;
 
-    public Key(Texture texture, int x, int y, Map map,int code) {
+    public Key(Texture texture, int x, int y, Map map, int code) {
         super(texture, x, y, map);
         keyCode = code;
     }

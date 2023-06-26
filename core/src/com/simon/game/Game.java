@@ -37,8 +37,8 @@ public class Game extends ApplicationAdapter {
 		// Managing maps
 		mapId = 0;
 		maps = new Map[100];
-		maps[0] = MapFactory.create(0, cam, maps);
-		maps[0].enter();
+		maps[mapId] = MapFactory.create(mapId, cam, maps);
+		maps[mapId].enter();
 
 		// Startup Animation
 		firstFrame = true;
@@ -92,11 +92,16 @@ public class Game extends ApplicationAdapter {
 						return super.keyDown(keycode);
 					case Input.Keys.F:
 						maps[mapId].pickUp(player);
+						return super.keyDown(keycode);
 					case Input.Keys.SPACE:
-						player.useItem(maps[mapId]);
+						if (player.isInInventory()) {
+							player.useItem(maps[mapId]);
+						}
+						return super.keyDown(keycode);
 					case Input.Keys.ENTER:
 						firstFrame = false;
 						logo.dispose();
+						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
 			}

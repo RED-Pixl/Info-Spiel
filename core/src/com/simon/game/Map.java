@@ -56,7 +56,6 @@ public abstract class Map {
         Optional<Entity> itemOpt = Arrays.stream(entities.toArray()).filter((a) -> a instanceof Item).filter((a) -> (new Point(a.getX(), a.getY()).distance(player.getX() + 8, player.getY() + 16) <= 64)).min((a, b) -> (int) (new Point(a.getX(), a.getY()).distance(player.getX() + 8, player.getY() + 16) - new Point(b.getX(), b.getY()).distance(player.getX() + 8, player.getY() + 16)));
         if (itemOpt.isPresent()) {
             Item item = (Item) itemOpt.get();
-            System.out.println((item.getX() - player.getX())^2 + (item.getY() - player.getY())^2);
             removeEntity(item);
             player.addToInventory(item);
         }

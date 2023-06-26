@@ -56,25 +56,6 @@ public class Player {
 
         inventory = new Array<>();
         selected = 0;
-        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0) {
-            @Override
-            public boolean use(Player player, Entity interaction) {
-                return false;
-            }
-        });
-        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0) {
-            @Override
-            public boolean use(Player player, Entity interaction) {
-                return false;
-            }
-        });
-        inventory.add(new Item(new Texture("Sprites/item.png"), 0, 0) {
-            @Override
-            public boolean use(Player player, Entity interaction) {
-                return false;
-            }
-        });
-        inventory.add(new Key(new Texture(Gdx.files.internal("Sprites/key.png")), 0, 0, 1));
     }
 
     public void startSprint() {
@@ -209,6 +190,14 @@ public class Player {
 
     public int getY() {
         return (int) rectangle.y;
+    }
+
+    public void setX(int x) {
+        rectangle.x = x;
+    }
+
+    public void setY(int y) {
+        rectangle.y = y;
     }
 
     public void revertMovement() {

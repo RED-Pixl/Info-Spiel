@@ -9,7 +9,7 @@ public abstract class Entity {
     protected Map map;
     protected boolean collide;
 
-    public Entity(int x, int y, Map map, byte width, byte height, boolean collide) {
+    public Entity(int x, int y, Map map, short width, short height, boolean collide) {
         rectangle = new Rectangle(x, y, width, height);
         this.map = map;
         this.collide = collide;
@@ -17,7 +17,9 @@ public abstract class Entity {
 
     public abstract void draw(SpriteBatch batch);
 
-    public abstract void interact(Player player);
+    public void interact(Player player) {
+        return;
+    }
 
     public void removeFromMap() {
         map.removeEntity(this);

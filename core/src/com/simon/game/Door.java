@@ -12,10 +12,21 @@ public class Door extends Entity{
     public Door(int x, int y, Map map, int key, boolean open) {
         super(x, y, map, (byte) 32, (byte) 32, true);
         keyCode = key;
-        if (!open) {
-            texture = new Texture(Gdx.files.internal("Sprites/doorClosed.png"));
-        } else {
-            texture = new Texture(Gdx.files.internal("Sprites/doorOpen.png"));
+        switch (key) {
+            case 0 -> {
+                if (!open) {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorClosedOrange.png"));
+                } else {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorOpenOrange.png"));
+                }
+            }
+            case 1 -> {
+                if (!open) {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorClosedYellow.png"));
+                } else {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorOpenYellow.png"));
+                }
+            }
         }
         collide = !open;
     }
@@ -41,7 +52,10 @@ public class Door extends Entity{
         if (code == keyCode) {
             collide = false;
             texture.dispose();
-            texture = new Texture(Gdx.files.internal("Sprites/doorOpen.png"));
+            switch (keyCode) {
+                case 0 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenOrange.png"));
+                case 1 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenYellow.png"));
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Key extends Item{
 
-    private int keyCode;
+    private final int keyCode;
 
     public Key(Texture texture, int x, int y, Map map,int code) {
         super(texture, x, y, map);

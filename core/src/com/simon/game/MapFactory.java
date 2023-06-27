@@ -533,7 +533,8 @@ public class MapFactory{
                     };
             case 9 ->
                 // Ausgang
-                new Map(new TmxMapLoader().load("09.tmx"), cam) {
+                new Map(new TmxMapLoader().load("09.tmx"), cam,
+                        new Door(18 * 32, 14 * 32 - 6, maps[7], 4, true)) {
                     @Override
                     public byte keepInBounds(Player player) {
                         if (player.getX() < 9 * 32) {

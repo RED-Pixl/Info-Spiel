@@ -19,7 +19,7 @@ public class Game extends ApplicationAdapter {
 	Player player;
 	private Map[] maps;
 	private byte mapId;
-	private boolean firstFrame;
+	private int firstFrame;
 	private Texture logo;
 	
 	@Override
@@ -32,8 +32,8 @@ public class Game extends ApplicationAdapter {
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
 		// Managing maps
-		mapId = 0;
-		maps = new Map[100];
+		mapId = 7;
+		maps = new Map[10];
 		maps[mapId] = MapFactory.create(mapId, cam, maps);
 		maps[mapId].enter();
 
@@ -42,7 +42,7 @@ public class Game extends ApplicationAdapter {
 		player.updateMap(mapId);
 
 		// Startup Animation
-		firstFrame = true;
+		firstFrame = -1;
 		logo = new Texture(Gdx.files.internal("Sprites/title.png"));
 
 		// Input Processor for managing the keyboard inputs
@@ -100,8 +100,12 @@ public class Game extends ApplicationAdapter {
 						}
 						return super.keyDown(keycode);
 					case Input.Keys.ENTER:
-						firstFrame = false;
-						logo.dispose();
+						if (firstFrame == -1) {
+							firstFrame = 0;
+							logo.dispose();
+						} else if (firstFrame == 1) {
+							Gdx.app.exit();
+						}
 						return super.keyDown(keycode);
 				}
 				return super.keyDown(keycode);
@@ -141,14 +145,18 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(Color.BLACK);
 		viewport.apply();
 		spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-		if (firstFrame) {
+		if (firstFrame == -1) {
 			spriteBatch.begin();
 			spriteBatch.draw(logo, 0, 0);
 			spriteBatch.end();
-		} else {
+		} else if (firstFrame == 0) {
 			maps[mapId].draw(spriteBatch);
 			player.draw(spriteBatch);
 			act();
+		} else {
+			spriteBatch.begin();
+			spriteBatch.draw(logo, 0, 0);
+			spriteBatch.end();
 		}
 	}
 
@@ -158,10 +166,15 @@ public class Game extends ApplicationAdapter {
 		// updating the map
 		if (mapId != (mapId = maps[mapId].keepInBounds(player))) {
 			player.updateMap(mapId);
-			if (maps[mapId] == null) {
-				maps[mapId] = MapFactory.create(mapId, cam, maps);
+			if (mapId == 10) {
+				firstFrame = 1;
+				logo = new Texture(Gdx.files.internal("Sprites/end.png"));
+			} else {
+				if (maps[mapId] == null) {
+					maps[mapId] = MapFactory.create(mapId, cam, maps);
+				}
+				maps[mapId].enter();
 			}
-			maps[mapId].enter();
 		}
 	}
 

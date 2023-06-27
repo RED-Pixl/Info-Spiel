@@ -34,6 +34,20 @@ public class Door extends Entity{
                     texture = new Texture(Gdx.files.internal("Sprites/doorOpenOld.png"));
                 }
             }
+            case 3 -> {
+                if (!open) {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorClosedBlue.png"));
+                } else {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorOpenBlue.png"));
+                }
+            }
+            case 4 -> {
+                if (!open) {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorClosedGreen.png"));
+                } else {
+                    texture = new Texture(Gdx.files.internal("Sprites/doorOpenGreen.png"));
+                }
+            }
         }
         collide = !open;
     }
@@ -63,6 +77,8 @@ public class Door extends Entity{
                 case 0 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenOrange.png"));
                 case 1 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenYellow.png"));
                 case 2 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenOld.png"));
+                case 3 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenBlue.png"));
+                case 4 -> texture = new Texture(Gdx.files.internal("Sprites/doorOpenGreen.png"));
             }
         }
     }

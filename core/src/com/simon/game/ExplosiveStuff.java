@@ -14,11 +14,6 @@ public class ExplosiveStuff extends Item{
         duration = Float.MIN_VALUE;
     }
 
-    public ExplosiveStuff(int x, int y) {
-        super(new Texture(Gdx.files.internal("Sprites/explosiveStuff.png")), x, y);
-        duration = Float.MIN_VALUE;
-    }
-
     @Override
     public boolean use(Player player, Entity interaction) {
         player.removeFromInv(this);

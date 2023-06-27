@@ -3,6 +3,7 @@ package com.simon.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class ExplosiveStuff extends Item{
 
@@ -21,6 +22,7 @@ public class ExplosiveStuff extends Item{
     @Override
     public boolean use(Player player, Entity interaction) {
         player.removeFromInv(this);
+        takable = false;
         this.map = player.getMap();
         map.addEntity(this);
         setPos(player.getX(), player.getY());
@@ -54,18 +56,13 @@ public class ExplosiveStuff extends Item{
     }
 
     @Override
-    public void interact(Player player) {
-        if (duration == Float.MIN_VALUE) {
-            super.interact(player);
-        } else {
-            return;
-        }
-    }
-
-    @Override
     public void dispose() {
         texture.dispose();
         if (explosion != null) {
+            Entity entity = map.getNearestEntity(getX() + 16, getY() + 16);
+            if (entity instanceof Door) {
+                ((Door) entity).open(2);
+            }
             explosion.dispose();
         }
     }

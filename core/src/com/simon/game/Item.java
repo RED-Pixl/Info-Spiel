@@ -6,22 +6,27 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class Item extends Entity {
 
     protected Texture texture;
+    protected boolean takable;
 
     public Item(Texture texture, int x, int y, Map map) {
         super(x, y, map, (byte) 32, (byte) 32, false);
         this.texture = texture;
+        takable = true;
     }
 
     public Item(Texture texture, int x, int y) {
         super(x, y, null, (byte) 32, (byte) 32, false);
         this.texture = texture;
+        takable = true;
     }
 
     @Override
     public void interact(Player player) {
-        player.addToInventory(this);
-        removeFromMap();
-        map = null;
+        if (takable) {
+            player.addToInventory(this);
+            removeFromMap();
+            map = null;
+        }
     }
 
     public abstract boolean use(Player player, Entity interaction);

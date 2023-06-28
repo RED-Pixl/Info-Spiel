@@ -32,7 +32,7 @@ public class Game extends ApplicationAdapter {
 		viewport = new ExtendViewport(viewportWidth, viewportHeight, cam);
 
 		// Managing maps
-		mapId = 0;
+		mapId = 8;
 		maps = new Map[10];
 		maps[mapId] = MapFactory.create(mapId, cam, maps);
 		maps[mapId].enter();

@@ -534,7 +534,23 @@ public class MapFactory{
             case 9 ->
                 // Ausgang
                 new Map(new TmxMapLoader().load("09.tmx"), cam,
-                        new Door(18 * 32, 14 * 32 - 6, maps[7], 4, true)) {
+                        new Door(18 * 32, 14 * 32 - 6, maps[7], 4, true),
+                        new Entity(0, 0, maps[9], (short) 96, (short) 42, false) {
+                            private final Texture texture = new Texture(Gdx.files.internal("Sprites/light.png"));
+
+                            @Override
+                            public void draw(SpriteBatch batch) {
+                                batch.begin();
+                                batch.draw(texture, 13 * 32 + 16, 6 * 32);
+                                batch.draw(texture, 13 * 32 + 16, 6 * 32);
+                                batch.end();
+                            }
+
+                            @Override
+                            public void dispose() {
+
+                            }
+                        }) {
                     @Override
                     public byte keepInBounds(Player player) {
                         if (player.getX() < 9 * 32) {
